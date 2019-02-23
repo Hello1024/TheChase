@@ -8,9 +8,9 @@
  */
 var models = [
     {width: 30, height: 22, dir: 1}, 
-    {width: 29, height: 24, dir: -1}, 
+    {width: 29, height: 24, dir: 1}, 
     {width:24, height: 26, dir: 1}, 
-    {width: 24, height: 21, dir: -1}, 
+    {width: 24, height: 21, dir: 1}, 
     {width: 46, height: 19, dir: 1}
 ];
 var lengths = [{width: 179, height: 21}, {width: 118, height: 21}, {width: 85, height: 22}];
@@ -50,7 +50,6 @@ var start_game = function() {
         draw_bg();
         draw_info();
         make_cars();
-        make_logs();
         draw_frog();
         setInterval(game_loop, 50);
     };
@@ -60,7 +59,6 @@ var game_loop = function() {
     draw_bg();
     draw_info();
     draw_cars();
-    draw_logs();
     draw_wins();
     if (game.lives > 0) { 
         draw_frog();
@@ -225,15 +223,6 @@ var draw_cars = function() {
     }
 };
 
-var draw_logs = function() {
-    for (var i=0; i< logs.length; i++) {
-        logs[i].move();
-        if (logs[i].out_of_bounds()) {
-            logs[i] = make_log(logs[i].row)
-        }
-        logs[i].draw();
-    }
-};
 
 var game_over = function() {
     context.font = 'bold 72pt arial';
@@ -394,13 +383,13 @@ var make_cars = function() {
 var make_car = function(row, x, model) {
     switch(row) {
         case 0:
-            return new Car(x==null?-25:x, rows[row], row, 3, model==null?1:model);
+            return new Car(x==null?399:x, rows[row], row, 3, model==null?1:model);
         case 1:
             return new Car(x==null?399:x, rows[row], row, 2, model==null?0:model);
         case 2:
             return new Car(x==null?399:x, rows[row], row, 4, model==null?2:model);
         case 3:
-            return new Car(x==null?-25:x, rows[row], row, 3, model==null?3:model);
+            return new Car(x==null?399:x, rows[row], row, 3, model==null?3:model);
         case 4:
             return new Car(x==null?399:x, rows[row], row, 3, model==null?0:model);
         case 5:
@@ -408,36 +397,6 @@ var make_car = function(row, x, model) {
     }
 };
 
-var make_logs = function() {
-    logs = [
-        make_log(7), 
-        make_log(7, 170), 
-        make_log(8), 
-        make_log(8, 200), 
-        make_log(9), 
-        make_log(10), 
-        make_log(11), 
-        make_log(11, 100, 0), 
-        make_log(12)
-    ];
-};
-
-var make_log = function(row, x, len) {
-    switch(row) {
-        case 7:
-            return new Log(x==null?399:x, rows[row], row, 1, 1, len==null?1:len);
-        case 8:
-            return new Log(x==null?-85:x, rows[row], row, 4, -1, len==null?2:len);
-        case 9:
-            return new Log(x==null?399:x, rows[row], row, 2, 1, len==null?0:len);
-        case 10:
-            return new Log(x==null?-85:x, rows[row], row, 2, -1, len==null?1:len);
-        case 11:
-            return new Log(x==null?399:x, rows[row], row, 3, 1, len==null?1:len);
-        case 12:
-            return new Log(x==null?-85:x, rows[row], row, 3, -1, len==null?2:len);
-    }
-};
 
 /* game "classes" - game, car, log
  * Car models:
