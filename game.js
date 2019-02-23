@@ -6,13 +6,7 @@
  *   rows : Int[] -- y-coords of rows starting with first traffic row
  *   context : Canvas Context -- used for drawing to main canvas.
  */
-var models = [
-    {width: 30, height: 22, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0000.jpg" }, 
-    {width: 29, height: 24, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0001.jpg"}, 
-    {width:24, height: 26, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0002.jpg"}, 
-    {width: 24, height: 21, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0003.jpg"}, 
-    {width: 46, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0004.jpg"}
-];
+
 var lengths = [{width: 179, height: 21}, {width: 118, height: 21}, {width: 85, height: 22}];
 var rows = [473, 443, 413, 383, 353, 323, 288, 261, 233, 203, 173, 143, 113];
 var context = null;
@@ -60,6 +54,7 @@ var game_loop = function() {
         draw_bg();
         draw_info();
         draw_cars();
+        draw_police();
         if (game.lives > 0) { 
             draw_frog();
         } else {
@@ -169,6 +164,10 @@ var draw_frog = function() {
             game.width = 19, game.height = 23;
         }
     }
+};
+
+var draw_police = function() {
+  context.drawImage(sprites, 12, 335, 19, 23, game.policePosX, 473-150, 19, 150);
 };
 
 
@@ -283,7 +282,16 @@ var hit_car = function() {
     game.paused = true;
     context.drawImage(models[game.last_hit.model].image, 50, 50);
     setTimeout(() => {
-        prompt();
+        var answer = prompt();
+        if (game.last_hit.answer) {
+            if (answer == game.last_hit.answer ) {
+                // Correct
+                game.policePosX -= 30;
+            } else {
+                // wrong
+                game.policePosX += 30;
+            }
+        }
         game.last_hit.invisible = true;
         game.paused = false;
     }, 100);
@@ -307,17 +315,17 @@ var make_random_car = function() {
 var make_car = function(row, x, model) {
     switch(row) {
         case 0:
-            return new Car(x==null?399:x, rows[row], row, 3, model==null?1:model);
+            return new Car(x==null?399:x, rows[row], row, 0.6, model==null?1:model);
         case 1:
-            return new Car(x==null?399:x, rows[row], row, 2, model==null?0:model);
+            return new Car(x==null?399:x, rows[row], row, 0.4, model==null?0:model);
         case 2:
-            return new Car(x==null?399:x, rows[row], row, 4, model==null?2:model);
+            return new Car(x==null?399:x, rows[row], row, 0.8, model==null?2:model);
         case 3:
-            return new Car(x==null?399:x, rows[row], row, 3, model==null?3:model);
+            return new Car(x==null?399:x, rows[row], row, 0.6, model==null?3:model);
         case 4:
-            return new Car(x==null?399:x, rows[row], row, 3, model==null?0:model);
+            return new Car(x==null?399:x, rows[row], row, 0.6, model==null?0:model);
         case 5:
-            return new Car(x==null?399:x, rows[row], row, 4, model==null?4:model);
+            return new Car(x==null?399:x, rows[row], row, 0.9, model==null?4:model);
     }
 };
 
@@ -358,7 +366,8 @@ var Game = function() {
     this.lives = 5;
     this.extra = 0;
     this.level = 1;
-    this.score = 0;   
+    this.score = 0;
+    this.policePosX = 0;  
     this.reset = function () {
         this.posY = 473;
         this.posX = 187;
