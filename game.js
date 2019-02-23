@@ -254,11 +254,14 @@ var car_collision = function() {
                     cars[i].posY, 
                     cars[i].width, 
                     cars[i].height)) {
+                // we can't hit more stuff till the old one is resolved
+                if (game.last_hit) return false; 
                 game.last_hit = cars[i];
                 return true;
             } 
         }
     }
+    game.last_hit = false;
     return false;
 };
 
