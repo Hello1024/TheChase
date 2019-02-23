@@ -17,6 +17,7 @@ var start_game = function() {
         var arrow_key = get_arrow_key(e);
         if (arrow_key) {
             e.preventDefault(); 
+            game.paused = false;
         }
         if (game.dead === -1 && game.lives > 0) {
             if (arrow_key === 'u'){ 
@@ -304,24 +305,11 @@ var make_cars = function() {
 
 
 var make_random_car = function() {
-    return make_car(Math.floor(Math.random()*6), Math.random()*399, Math.floor(Math.random()*5));
+    return make_car(Math.floor(Math.random()*6), Math.random()*399, Math.floor(Math.random()*models.length));
 };
 
 var make_car = function(row, x, model) {
-    switch(row) {
-        case 0:
-            return new Car(x==null?399:x, rows[row], row, 0.6, model==null?1:model);
-        case 1:
-            return new Car(x==null?399:x, rows[row], row, 0.4, model==null?0:model);
-        case 2:
-            return new Car(x==null?399:x, rows[row], row, 0.8, model==null?2:model);
-        case 3:
-            return new Car(x==null?399:x, rows[row], row, 0.6, model==null?3:model);
-        case 4:
-            return new Car(x==null?399:x, rows[row], row, 0.6, model==null?0:model);
-        case 5:
-            return new Car(x==null?399:x, rows[row], row, 0.9, model==null?4:model);
-    }
+    return new Car(x==null?399:x, rows[row], row, model==null?1:model);
 };
 
 
@@ -333,11 +321,11 @@ var make_car = function(row, x, model) {
  *   3: white bulldozer
  *   4: white truck
  */
-var Car = function(x, y, lane, speed, model) {
+var Car = function(x, y, lane, model) {
     this.posX = x;
     this.posY = y;
     this.lane = lane;
-    this.speed = speed;
+    this.speed = Math.random()+0.1;
     this.model = model;
     this.width = models[model].width;
     this.height = models[model].height;
@@ -370,6 +358,7 @@ var Game = function() {
         this.highest = -1;
         this.dead = -1;
     }
+    this.paused = true;
     this.reset();
 }
 
