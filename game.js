@@ -7,11 +7,11 @@
  *   context : Canvas Context -- used for drawing to main canvas.
  */
 var models = [
-    {width: 30, height: 22, dir: 1}, 
-    {width: 29, height: 24, dir: 1}, 
-    {width:24, height: 26, dir: 1}, 
-    {width: 24, height: 21, dir: 1}, 
-    {width: 46, height: 19, dir: 1}
+    {width: 30, height: 22, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0000.jpg" }, 
+    {width: 29, height: 24, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0001.jpg"}, 
+    {width:24, height: 26, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0002.jpg"}, 
+    {width: 24, height: 21, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0003.jpg"}, 
+    {width: 46, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0004.jpg"}
 ];
 var lengths = [{width: 179, height: 21}, {width: 118, height: 21}, {width: 85, height: 22}];
 var rows = [473, 443, 413, 383, 353, 323, 288, 261, 233, 203, 173, 143, 113];
@@ -56,13 +56,15 @@ var start_game = function() {
 };
 
 var game_loop = function() {
-    draw_bg();
-    draw_info();
-    draw_cars();
-    if (game.lives > 0) { 
-        draw_frog();
-    } else {
-        game_over();
+    if (!game.paused) {
+        draw_bg();
+        draw_info();
+        draw_cars();
+        if (game.lives > 0) { 
+            draw_frog();
+        } else {
+            game_over();
+        }
     }
 };
 
@@ -90,7 +92,7 @@ var get_arrow_key = function(e) {
 var draw_bg = function() {
     context.fillStyle='#191970';
     context.fillRect(0,0,399,284);
-    context.fillStyle='#000000';
+    context.fillStyle='#D8D5C4';
     context.fillRect(0,284,399,283);
     context.drawImage(sprites, 0, 0, 399, 113, 0, 0, 399, 113);
     context.drawImage(sprites, 0, 119, 399, 34, 0, 283, 399, 34);
@@ -147,7 +149,7 @@ var draw_frog = function() {
         game.reset();
     }
     else if (car_collision()) {
-        sploosh();
+        hit_car();
     }
     else {
         if (game.facing === 'u') {
@@ -176,7 +178,8 @@ var draw_cars = function() {
         if (cars[i].out_of_bounds()) {
             cars[i] = make_car(cars[i].lane, null, cars[i].model);
         }
-        cars[i].draw();
+        if (!cars[i].invisible)
+          cars[i].draw();
     }
 };
 
@@ -252,7 +255,7 @@ var collides = function(x1, y1, w1, h1, x2, y2, w2, h2) {
 var car_collision = function() {
     if (game.posY < 505 && game.posY > 270) {
         for (var i=0; i<cars.length; i++) {
-            if (collides(
+            if (!cars[i].invisible && collides(
                     game.posX, 
                     game.posY, 
                     game.width, 
@@ -261,6 +264,7 @@ var car_collision = function() {
                     cars[i].posY, 
                     cars[i].width, 
                     cars[i].height)) {
+                game.last_hit = cars[i];
                 return true;
             } 
         }
@@ -275,12 +279,23 @@ var sploosh = function() {
     game.dead = 20;
 };
 
+var hit_car = function() {
+    game.paused = true;
+    context.drawImage(models[game.last_hit.model].image, 50, 50);
+    setTimeout(() => {
+        prompt();
+        game.last_hit.invisible = true;
+        game.paused = false;
+    }, 100);
+
+};
+
 // object initializers - cars
 var make_cars = function() {
     cars = [
         make_car(0), 
-        make_car(0, 130, 3), 
-        make_car(0, 260, 3), 
+        make_car(0, 130, 0), 
+        make_car(0, 260, 0), 
         make_car(1), 
         make_car(2), 
         make_car(2, 150, 0), 
@@ -330,22 +345,11 @@ var Car = function(x, y, lane, speed, model) {
         this.posX = this.posX - (models[model].dir * this.speed * game.level);
     };
     this.draw = function() {
-        switch(this.model) {
-            case 0:
-                context.drawImage(sprites, 8, 265, 30, 22, this.posX, this.posY, 30, 22);
-                break;
-            case 1: 
-                context.drawImage(sprites, 45, 264, 29, 24, this.posX, this.posY, 29, 24);
-                break;
-            case 2: 
-                context.drawImage(sprites, 81, 263, 24, 26, this.posX, this.posY, 24, 26);
-                break;
-            case 3: 
-                context.drawImage(sprites, 9, 300, 24, 21, this.posX, this.posY, 24, 21);
-                break;
-            case 4: 
-                context.drawImage(sprites, 105, 301, 46, 19, this.posX, this.posY, 46, 19);
-                break;         
+        if (models[this.model].image) {
+            context.drawImage(models[this.model].image, this.posX, this.posY, 30, 22);
+        } else {
+            models[this.model].image = new Image();
+            models[this.model].image.src = models[this.model].file;
         }
     };
     this.out_of_bounds = function() {
@@ -353,6 +357,7 @@ var Car = function(x, y, lane, speed, model) {
     };
 };
 var Game = function() {
+    this.preloaded_data = {};
     this.lives = 5;
     this.extra = 0;
     this.level = 1;
