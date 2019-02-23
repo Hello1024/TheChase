@@ -51,6 +51,7 @@ var start_game = function() {
 
 var game_loop = function() {
     if (!game.paused) {
+        game.score += 1;
         draw_bg();
         draw_info();
         draw_cars();
@@ -96,10 +97,8 @@ var draw_bg = function() {
 
 var draw_info = function() {
     draw_lives();
-    context.font = 'bold 14pt arial';
-    context.fillStyle = '#00EE00';
-    context.fillText('Level ', 74, 545);
-    draw_level();
+    context.fillStyle = '#600000';
+
     context.font = 'bold 10pt arial';
     context.fillText('Score: ', 4, 560);
     context.fillText('Highscore: ', 200, 560);
@@ -120,13 +119,11 @@ var draw_lives = function() {
 
 var draw_level = function() {
     context.font = 'bold 15pt arial';
-    context.fillStyle = '#00EE00';
     context.fillText(game.level, 131, 545);
 };
 
 var draw_score = function() {
     context.font = 'bold 10pt arial';
-    context.fillStyle = '#00EE00';
     context.fillText(game.score, 49, 560);
     if (window.localStorage['highscore']) {
         highscore = localStorage['highscore'];
@@ -146,6 +143,11 @@ var draw_frog = function() {
     else if (car_collision()) {
         hit_car();
     }
+    // police collision
+    else if (game.posX < game.policePosX + 30) {
+        sploosh();
+    }
+
     else {
         if (game.facing === 'u') {
             context.drawImage(sprites, 12, 369, 23, 17, game.posX, game.posY, 23, 17);
@@ -167,7 +169,7 @@ var draw_frog = function() {
 };
 
 var draw_police = function() {
-  context.drawImage(sprites, 12, 335, 19, 23, game.policePosX, 473-150, 19, 150);
+  context.drawImage(sprites, 12, 335, 19, 23, game.policePosX, 473-150, 19, 180);
 };
 
 
@@ -203,10 +205,6 @@ var up = function() {
         game.posY -= 30;
         game.current++;
     }
-    if (game.current > game.highest) {
-        game.score += 10;
-        game.highest++;
-    }
     game.facing = 'u';
 };
 
@@ -236,13 +234,6 @@ var bounds_check = function(x, y) {
 };
 
 
-var level = function() {
-    for (var i=0; i<game.won.length; i++) {
-        game.won[i] = false;
-    }
-    game.score += 1000;
-    game.level++;
-};
 
 var collides = function(x1, y1, w1, h1, x2, y2, w2, h2) {
     return (((x1 <= x2+w2 && x1 >=x2) && (y1 <= y2+h2 && y1 >= y2)) ||
@@ -283,10 +274,11 @@ var hit_car = function() {
     context.drawImage(models[game.last_hit.model].image, 50, 50);
     setTimeout(() => {
         var answer = prompt();
-        if (game.last_hit.answer) {
-            if (answer == game.last_hit.answer ) {
+        if (models[game.last_hit.model].answer) {
+            if (answer == models[game.last_hit.model].answer ) {
                 // Correct
-                game.policePosX -= 30;
+                game.policePosX -= 3;
+                game.score += 1000;
             } else {
                 // wrong
                 game.policePosX += 30;
@@ -347,7 +339,7 @@ var Car = function(x, y, lane, speed, model) {
     this.width = models[model].width;
     this.height = models[model].height;
     this.move = function() {
-        this.posX = this.posX - (models[model].dir * this.speed * game.level);
+        this.posX = this.posX - (models[model].dir * this.speed * (game.posX/100));
     };
     this.draw = function() {
         if (models[this.model].image) {
@@ -362,8 +354,7 @@ var Car = function(x, y, lane, speed, model) {
     };
 };
 var Game = function() {
-    this.preloaded_data = {};
-    this.lives = 5;
+    this.lives = 3;
     this.extra = 0;
     this.level = 1;
     this.score = 0;
