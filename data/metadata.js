@@ -22,4 +22,19 @@ var models = [
     {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00021.jpg", answer: "Twenty"},
     {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00022.jpg", answer: "Whereas"},
 
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00023.jpg"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00024.jpg"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00025.jpg"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00026.jpg"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00027.jpg"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00028.jpg"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00029.jpg"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00030.jpg"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00031.jpg"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00032.jpg"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00033.jpg"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00034.jpg"},
+
 ];
+    
+        
