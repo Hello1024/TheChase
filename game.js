@@ -59,7 +59,6 @@ var game_loop = function() {
     draw_bg();
     draw_info();
     draw_cars();
-    draw_wins();
     if (game.lives > 0) { 
         draw_frog();
     } else {
@@ -87,7 +86,7 @@ var get_arrow_key = function(e) {
     return null;
 };
 
-//drawer functions: bg, info, frogger, cars, logs, wins
+//drawer functions: bg, info, frogger, cars
 var draw_bg = function() {
     context.fillStyle='#191970';
     context.fillRect(0,0,399,284);
@@ -139,7 +138,6 @@ var draw_score = function() {
 };
 
 var draw_frog = function() {
-    game.log = log_collision();
     if (game.dead > 0) {
             // @4,2 ; 19x24
         context.drawImage(deadsprite, 4, 2, 19, 24, game.posX, game.posY, 19, 24);
@@ -148,28 +146,10 @@ var draw_frog = function() {
     else if (game.dead === 0) {
         game.reset();
     }
-    else if (game.win > 0) {
-        game.win--;
-    }
-    else if (game.win === 0) {
-        game.reset();
-    }
     else if (car_collision()) {
         sploosh();
     }
-    else if (water_collision() && game.log === -1) {
-        sploosh();
-    }
-    else if (check_win()){
-        win();
-    }
     else {
-        if (game.log >= 0) {
-            var tempX = game.posX - (logs[game.log].dir * logs[game.log].speed);
-            if (bounds_check(tempX, game.posY)) {
-                game.posX = tempX;
-            }
-        }
         if (game.facing === 'u') {
             context.drawImage(sprites, 12, 369, 23, 17, game.posX, game.posY, 23, 17);
             game.width = 23, game.height = 17;
@@ -189,29 +169,6 @@ var draw_frog = function() {
     }
 };
 
-var draw_wins = function() {
-    for (var i=0; i<game.won.length; i++) {
-        if(game.won[i]) {
-            switch (i) {
-                case 0:
-                    context.drawImage(sprites, 80, 369, 23, 17, 15, 80, 23, 17);
-                    break;
-                case 1:
-                    context.drawImage(sprites, 80, 369, 23, 17, 101, 80, 23, 17);
-                    break;
-                case 2:
-                    context.drawImage(sprites, 80, 369, 23, 17, 187, 80, 23, 17);
-                    break;
-                case 3:
-                    context.drawImage(sprites, 80, 369, 23, 17, 270, 80, 23, 17);
-                    break;
-                case 4:
-                    context.drawImage(sprites, 80, 369, 23, 17, 354, 80, 23, 17);
-                    break;                    
-            }
-        }
-    }
-};
 
 var draw_cars = function() {
     for (var i=0; i<cars.length; i++) {
@@ -270,46 +227,12 @@ var right = function() {
 };
 
 var bounds_check = function(x, y) {
-    if (y > 90 && y < 510 && x > 0 && x < 369) {
-        return true;
-    }
-    else if (y > 60 && y < 100 && ((x > 5 && x < 40 && !game.won[0]) || 
-                (x > 92 && x < 128 && !game.won[1]) || (x > 178 && x < 214 && !game.won[2]) ||
-                (x > 263 && x < 299 && !game.won[3]) || (x > 347 && x < 383 && !game.won[4]))) {
+    if (y > 300 && y < 480 && x > 0 && x < 369) {
         return true;
     }
     return false;
 };
 
-var check_win = function() {
-    if(game.posY > 60 && game.posY < 100){
-        if(game.posX > 5 && game.posX < 40 && !game.won[0]){
-            game.won[0] = true;
-            return true;
-        } else if (game.posX > 92 && game.posX < 128 && !game.won[1]){
-            game.won[1] = true;
-            return true;
-        } else if (game.posX > 178 && game.posX < 214 && !game.won[2]){
-            game.won[2] = true;
-            return true;
-        } else if (game.posX > 263 && game.posX < 299 && !game.won[3]){
-            game.won[3] = true;
-            return true;
-        } else if (game.posX > 347 && game.posX < 383 && !game.won[4]){
-            game.won[4] = true;
-            return true;
-        }
-    }
-    return false;
-};
-
-var win = function() {
-    game.score += 50;
-    game.win = 15;
-    if(game.won[0] && game.won[1] && game.won[2] && game.won[3] && game.won[4]){
-        level();
-    }    
-};
 
 var level = function() {
     for (var i=0; i<game.won.length; i++) {
@@ -345,25 +268,14 @@ var car_collision = function() {
     return false;
 };
 
-var log_collision = function() {
-    if (game.posY < 270) {
-        for (var i=0; i<logs.length; i++) {
-            if (collides(game.posX, game.posY, game.width, game.height, logs[i].posX, logs[i].posY, logs[i].width, logs[i].height)) return i;
-        }
-    }
-    return -1;
-};
 
-var water_collision = function() {
-    return (game.posY > 105 && game.posY < 270);
-};
 
 var sploosh = function() {
     game.lives--;
     game.dead = 20;
 };
 
-// object initializers - cars, logs
+// object initializers - cars
 var make_cars = function() {
     cars = [
         make_car(0), 
@@ -398,7 +310,7 @@ var make_car = function(row, x, model) {
 };
 
 
-/* game "classes" - game, car, log
+/* game "classes" - game, car
  * Car models:
  *   0: pink sedan
  *   1: white sedan
@@ -437,69 +349,23 @@ var Car = function(x, y, lane, speed, model) {
         }
     };
     this.out_of_bounds = function() {
-        return ((this.posX + this.width) < 0 || this.posX > 399);
+        return ((this.posX + this.width) < 0);
     };
 };
-
-/* Log lengths:
- *   0: long
- *   1: medium
- *   2: small
- */
-var Log = function(x, y, row, speed, dir, length) {
-    this.posX = x;
-    this.posY = y;
-    this.row = row;
-    this.speed = speed;
-    this.dir = dir;
-    this.length = length;
-    this.width = lengths[length].width;
-    this.height = lengths[length].height;
-    this.move = function() {
-        this.posX = this.posX - (this.dir * this.speed);
-    }
-    this.draw = function () {
-        switch(this.length) {
-            case 0:
-                context.drawImage(sprites, 6, 165, 179, 21, this.posX, this.posY, 179, 21);
-                break;
-            case 1:
-                context.drawImage(sprites, 5, 197, 118, 21, this.posX, this.posY, 118, 21);
-                break;
-            case 2:
-                context.drawImage(sprites, 6, 229, 85, 22, this.posX, this.posY, 85, 22);
-                break;
-        }
-    }
-    this.out_of_bounds = function() {
-        return ((this.posX + this.width) < 0 || this.posX > 399);
-    }
-};
-
 var Game = function() {
     this.lives = 5;
     this.extra = 0;
     this.level = 1;
     this.score = 0;   
-    this.posX = 187;
-    this.posY = 503;
-    this.facing = 'u';
-    this.log = -1;
-    this.current = -1;
-    this.highest = -1;
-    this.dead = -1;
-    this.win = -1;
-    this.won = [false, false, false, false, false]; 
     this.reset = function () {
-        this.posY = 503;
+        this.posY = 473;
         this.posX = 187;
         this.facing = 'u';
-        this.log = -1;
         this.current = -1;
         this.highest = -1;
         this.dead = -1;
-        this.win = -1;
     }
+    this.reset();
 }
 
 start_game();
