@@ -1,11 +1,25 @@
 var models = [
 
-   
     {width: 30, height: 22, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0000.jpg", answer: "to"}, 
-    {width: 29, height: 24, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0001.jpg", answer: "favorable"}, 
-    {width:24, height: 26, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0002.jpg", answer: "tried"}, 
-    {width: 24, height: 21, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0003.jpg", answer: "may"}, 
-    {width: 46, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0004.jpg", answer: "Condition"},
-
+    {width: 30, height: 24, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0001.jpg", answer: "favorable"}, 
+    {width: 30, height: 26, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0002.jpg", answer: "tried"}, 
+    {width: 30, height: 21, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0003.jpg", answer: "may"}, 
+    {width: 30, height: 21, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0004.jpg", answer: "Condition"},    
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0006.jpg", answer: "Third"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0007.jpg", answer: "Mercy"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0008.jpg", answer: "Our"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.0009.jpg", answer: "your"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00010.jpg", answer: "old"},   
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00011.jpg", answer: "inducing"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00012.jpg", answer: "been"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00013.jpg", answer: "Us in"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00014.jpg", answer: "Us"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00015.jpg", answer: "holden"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00016.jpg", answer: "Townshend"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00017.jpg", answer: "take"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00018.jpg", answer: "of"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00019.jpg", answer: "and"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00021.jpg", answer: "Twenty"},
+    {width: 30, height: 19, dir: 1, file: "data/TNA_CCC_HO13_001_00004.00022.jpg", answer: "Whereas"},
 
 ];
