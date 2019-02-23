@@ -292,19 +292,16 @@ var hit_car = function() {
 
 // object initializers - cars
 var make_cars = function() {
-    cars = [
-        make_car(0), 
-        make_car(0, 130, 0), 
-        make_car(0, 260, 0), 
-        make_car(1), 
-        make_car(2), 
-        make_car(2, 150, 0), 
-        make_car(3, 200), 
-        make_car(4), 
-        make_car(5), 
-        make_car(5, 80), 
-        make_car(5, 240)
-    ];
+    cars = [];
+    for (var i=0; i < 30; i++) {
+        cars.push(make_random_car());
+    }
+    cars.forEach(c => c.invisible=true);
+};
+
+
+var make_random_car = function() {
+    return make_car(Math.floor(Math.random()*6), Math.random()*399, Math.floor(Math.random()*5));
 };
 
 var make_car = function(row, x, model) {
