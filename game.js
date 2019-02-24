@@ -10,8 +10,11 @@ var lengths = [{width: 179, height: 21}, {width: 118, height: 21}, {width: 85, h
 var rows = [473-271, 443-271, 413-271, 383-271, 353-271, 323-271, 0];
 var context = null;
 
-var start_game = function() {
+var show_rules = function() {
     document.getElementById('start_image').style.visibility="hidden";
+}
+var start_game = function() {
+    document.getElementById('rules_image').style.visibility="hidden";
 
     game = new Game();
     
