@@ -7,14 +7,14 @@
  */
 
 var lengths = [{width: 179, height: 21}, {width: 118, height: 21}, {width: 85, height: 22}];
-var rows = [473-288, 443-288, 413-288, 383-288, 353-288, 323-288, 0];
+var rows = [473-293, 443-293, 413-293, 383-293, 353-293, 323-293, 0];
 var context = null;
 
 var start_game = function() {
     document.getElementById('start_image').style.visibility="hidden";
 
     game = new Game();
-    /*
+    
     $(document).keydown(function(e) {
         var arrow_key = get_arrow_key(e);
         if (arrow_key) {
@@ -32,7 +32,7 @@ var start_game = function() {
                 right();
             }
         }
-    }); */
+    });
     board = document.getElementById('game');
     context = board.getContext('2d');
     
@@ -88,13 +88,12 @@ var get_arrow_key = function(e) {
 
 //drawer functions: bg, info, frogger, cars
 var draw_bg = function() {
-    context.fillStyle='#191970';
-    context.fillRect(0,0,399,284);
     context.fillStyle='#D8D5C4';
-    context.fillRect(0,284,399,283);
-    context.drawImage(sprites, 0, 0, 399, 113, 0, 0, 399, 113);
+    context.fillRect(0,0,399,284);
+
+    //context.drawImage(sprites, 0, 0, 399, 113, 0, 0, 399, 113);
     context.drawImage(sprites, 0, 119, 399, 34, 0, -5, 399, 34);
-    context.drawImage(sprites, 0, 119, 399, 34, 0, 495-288, 399, 34);
+    context.drawImage(sprites, 0, 119, 399, 34, 0, 495-293, 399, 34);
 };
 
 var draw_info = function() {
@@ -102,14 +101,14 @@ var draw_info = function() {
     context.fillStyle = '#600000';
 
     context.font = 'bold 10pt arial';
-    context.fillText('Score: ', 4, 560-288);
-    context.fillText('Highscore: ', 200, 560-288);
+    context.fillText('Score: ', 4, 560-293);
+    context.fillText('Highscore: ', 200, 560-293);
     draw_score();
 };
 
 var draw_lives = function() {
     var x = 4;
-    var y = 532-288;
+    var y = 532-293;
     if ((game.score - (game.extra * 10000)) >= 10000 && game.lives < 4) {
         game.extra++;
     }
@@ -121,16 +120,16 @@ var draw_lives = function() {
 
 var draw_level = function() {
     context.font = 'bold 15pt arial';
-    context.fillText(game.level, 131, 545-288);
+    context.fillText(game.level, 131, 545-293);
 };
 
 var draw_score = function() {
     context.font = 'bold 10pt arial';
-    context.fillText(game.score, 49, 560-288);
+    context.fillText(game.score, 49, 560-293);
     if (window.localStorage['highscore']) {
         highscore = localStorage['highscore'];
     } else highscore = 0;
-    context.fillText(highscore, 272, 560-288);
+    context.fillText(highscore, 272, 560-293);
 };
 
 var draw_frog = function() {
@@ -171,7 +170,7 @@ var draw_frog = function() {
 };
 
 var draw_police = function() {
-  context.drawImage(sprites, 12, 335, 19, 23, game.policePosX, 473-150-288, 19, 180);
+  context.drawImage(sprites, 12, 335, 19, 23, game.policePosX, 473-150-293, 19, 180);
 };
 
 
@@ -188,15 +187,15 @@ var draw_cars = function() {
 
 
 var game_over = function() {
-    context.font = 'bold 72pt arial';
-    context.fillStyle = '#FFFFFF';
-    context.fillText('GAME', 60, 0);
-    context.fillText('OVER', 60, 100);
+    context.font = 'bold 48pt arial';
+    context.fillStyle = '#222';
+    context.fillText('GAME', 60, 80);
+    context.fillText('OVER', 60, 160);
     if (game.score >= highscore) {
         localStorage['highscore'] = game.score;
-        context.font = 'bold 48pt arial';
-        context.fillStyle = '#00EE00';
-        context.fillText('YOU GOT A', 20, 200);
+        context.font = 'bold 32pt arial';
+        context.fillStyle = '#922';
+        context.fillText('YOU GOT A', 20, 210);
         context.fillText('HIGHSCORE', 6, 280);
     }
 };
@@ -229,7 +228,7 @@ var right = function() {
 };
 
 var bounds_check = function(x, y) {
-    if (y > 300-288 && y < 480-288 && x > 0 && x < 369) {
+    if (y > 300-293 && y < 480-293 && x > 0 && x < 369) {
         return true;
     }
     return false;
@@ -245,7 +244,7 @@ var collides = function(x1, y1, w1, h1, x2, y2, w2, h2) {
 }
 
 var car_collision = function() {
-    if (game.posY < 505-288 && game.posY > 270-288) {
+    if (game.posY < 505-293 && game.posY > 270-293) {
         for (var i=0; i<cars.length; i++) {
             if (!cars[i].invisible && collides(
                     game.posX, 
@@ -278,15 +277,19 @@ var hit_car = function() {
     game.paused = true;
     document.getElementById('questionimg').src = models[game.last_hit.model].file;
     document.getElementById('question').style.display = 'block';
+    document.getElementById('answerbox').value = '';
+    document.getElementById('answerbox').focus();
+
     
     setTimeout(() => {
         document.getElementById('question').style.display = 'none';
         var answer = document.getElementById('answerbox').value;
+        document.getElementById('answerbox').blur();
         if (models[game.last_hit.model].answer) {
             if (answer == models[game.last_hit.model].answer ) {
                 // Correct
                 game.policePosX -= 3;
-                game.score += 1000;
+                game.score += answer.length*200;
             } else {
                 // wrong
                 game.policePosX += 30;
@@ -355,7 +358,7 @@ var Game = function() {
     this.score = 0;
     this.policePosX = 0;  
     this.reset = function () {
-        this.posY = 473-288;
+        this.posY = 473-293;
         this.posX = 187;
         this.facing = 'u';
         this.current = -1;
