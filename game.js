@@ -301,7 +301,7 @@ var hit_car = function() {
         }
         game.last_hit.invisible = true;
         game.paused = false;
-    }, 5000);
+    }, 7000);
 
 };
 
