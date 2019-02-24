@@ -40,7 +40,7 @@ var start_game = function() {
     
     sprites = new Image();
     deadsprite = new Image();
-    sprites.src = 'assets/frogger_sprites.png'; 
+    sprites.src = 'assets/thechase_sprites_v2.png'; 
     deadsprite.src = 'assets/dead_frog.png';
     sprites.onload = function() {
         draw_bg();
@@ -170,7 +170,7 @@ var draw_frog = function() {
 };
 
 var draw_police = function() {
-  context.drawImage(sprites, 12, 335, 19, 23, game.policePosX, 473-150-293, 19, 180);
+  context.drawImage(sprites, 230, 315, 100, 180, game.policePosX, 473-150-293, 100, 180);
 };
 
 
@@ -358,7 +358,7 @@ var Game = function() {
     this.extra = 0;
     this.level = 1;
     this.score = 0;
-    this.policePosX = 0;  
+    this.policePosX = -50;  
     this.reset = function () {
         this.posY = 473-293;
         this.posX = 187;
