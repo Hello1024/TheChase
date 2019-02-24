@@ -5,7 +5,7 @@
 }
 
 canvas {
-    background-color: #cb630a;
+    background-color: blue;
     width: 100%;
     height: 100%;
     max-width: 100%;
@@ -21,4 +21,32 @@ html, body {
     margin: 0;
     height: 100%;
     overflow: hidden;
+}
+
+.fullscreen {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	
+    object-fit: contain;
+}
+
+#question {
+  padding: 10%;
+  width: 80%;
+  height: 80%;
+  background-color: rgba(0,0,0,0.8);
+  text-align: center;
+  color: #fff;
+  font-style: large;
+}
+#question img {
+  display: block;
+  width: 100%;
+  height: 80%;
+  object-fit: contain;
+}
+
+#question input {
+	width: 100%;
 }

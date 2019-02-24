@@ -2,13 +2,20 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Frogger</title>
+    <title>The Chase</title>
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div id="game_div">
-      <canvas id="game" height="565" width="399"></canvas>
+    <img id="start_image" src="assets/TheChaseTitleScreen.jpg" class='fullscreen' onclick="start_game();">
+    <div id='question' class='fullscreen' style='display: none'>
+       <img id=questionimg src="#">
+       <div>Whats this say?</div>
+       <input id=answerbox type=text>
     </div>
+    <div id="game_div">
+      <canvas id="game" height="277" width="399"></canvas>
+    </div>
+
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="data/metadata.js"></script>
     <script src="game.js"></script>
