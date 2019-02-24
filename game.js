@@ -36,7 +36,7 @@ var start_game = function() {
     board = document.getElementById('game');
     context = board.getContext('2d');
     
-    new Audio('07048106.wav').play();
+    new Audio('Sirens.mp3').play();
     
     sprites = new Image();
     deadsprite = new Image();
