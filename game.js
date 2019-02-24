@@ -7,7 +7,7 @@
  */
 
 var lengths = [{width: 179, height: 21}, {width: 118, height: 21}, {width: 85, height: 22}];
-var rows = [473-293, 443-293, 413-293, 383-293, 353-293, 323-293, 0];
+var rows = [473-271, 443-271, 413-271, 383-271, 353-271, 323-271, 0];
 var context = null;
 
 var start_game = function() {
@@ -89,11 +89,11 @@ var get_arrow_key = function(e) {
 //drawer functions: bg, info, frogger, cars
 var draw_bg = function() {
     context.fillStyle='#D8D5C4';
-    context.fillRect(0,0,399,284);
+    context.fillRect(0,0,399,344);
 
     //context.drawImage(sprites, 0, 0, 399, 113, 0, 0, 399, 113);
-    context.drawImage(sprites, 0, 119, 399, 34, 0, -5, 399, 34);
-    context.drawImage(sprites, 0, 119, 399, 34, 0, 495-293, 399, 34);
+    context.drawImage(sprites, 0, 119, 399, 34, 0, 0, 399, 34);
+    context.drawImage(sprites, 0, 119, 399, 34, 0, 495-271, 399, 34);
 };
 
 var draw_info = function() {
@@ -101,14 +101,14 @@ var draw_info = function() {
     context.fillStyle = '#600000';
 
     context.font = 'bold 10pt arial';
-    context.fillText('Score: ', 4, 560-293);
-    context.fillText('Highscore: ', 200, 560-293);
+    context.fillText('Score: ', 4, 560-271);
+    context.fillText('Highscore: ', 200, 560-271);
     draw_score();
 };
 
 var draw_lives = function() {
     var x = 4;
-    var y = 532-293;
+    var y = 532-271;
     if ((game.score - (game.extra * 10000)) >= 10000 && game.lives < 4) {
         game.extra++;
     }
@@ -120,16 +120,16 @@ var draw_lives = function() {
 
 var draw_level = function() {
     context.font = 'bold 15pt arial';
-    context.fillText(game.level, 131, 545-293);
+    context.fillText(game.level, 131, 545-271);
 };
 
 var draw_score = function() {
     context.font = 'bold 10pt arial';
-    context.fillText(game.score, 49, 560-293);
+    context.fillText(game.score, 49, 560-271);
     if (window.localStorage['highscore']) {
         highscore = localStorage['highscore'];
     } else highscore = 0;
-    context.fillText(highscore, 272, 560-293);
+    context.fillText(highscore, 272, 560-271);
 };
 
 var draw_frog = function() {
@@ -170,7 +170,7 @@ var draw_frog = function() {
 };
 
 var draw_police = function() {
-  context.drawImage(sprites, 230, 315, 100, 180, game.policePosX, 473-150-293, 100, 180);
+  context.drawImage(sprites, 230, 315, 100, 180, game.policePosX, 473-150-271, 100, 180);
 };
 
 
@@ -228,7 +228,7 @@ var right = function() {
 };
 
 var bounds_check = function(x, y) {
-    if (y > 300-293 && y < 480-293 && x > 0 && x < 369) {
+    if (y > 300-271 && y < 480-271 && x > 0 && x < 369) {
         return true;
     }
     return false;
@@ -244,7 +244,7 @@ var collides = function(x1, y1, w1, h1, x2, y2, w2, h2) {
 }
 
 var car_collision = function() {
-    if (game.posY < 505-293 && game.posY > 270-293) {
+    if (game.posY < 505-271 && game.posY > 270-271) {
         for (var i=0; i<cars.length; i++) {
             if (!cars[i].invisible && collides(
                     game.posX, 
@@ -360,7 +360,7 @@ var Game = function() {
     this.score = 0;
     this.policePosX = -50;  
     this.reset = function () {
-        this.posY = 473-293;
+        this.posY = 473-271;
         this.posX = 187;
         this.facing = 'u';
         this.current = -1;
@@ -380,7 +380,7 @@ window.addEventListener('load', function(){
         startY,
         Xdist,
         Ydist,
-        threshold = 150, //required min distance traveled to be considered swipe
+        threshold = 100, //required min distance traveled to be considered swipe
         allowedTime = 400, // maximum time allowed to travel that distance
         elapsedTime,
         startTime
@@ -421,10 +421,10 @@ window.addEventListener('load', function(){
         Ydist = touchobj.pageY - startY // get total dist traveled by finger while in contact with surface
         elapsedTime = new Date().getTime() - startTime // get time elapsed
         // check that elapsed time is within specified, horizontal dist traveled >= threshold, and vertical dist traveled <= 100
-        var swiperightBol = (elapsedTime <= allowedTime && Xdist >= threshold && Math.abs(Ydist) <= 100);
-        var swipeleftBol = (elapsedTime <= allowedTime && Xdist <= -threshold && Math.abs(Ydist) <= 100);
-        var swipedownBol = (elapsedTime <= allowedTime && Ydist >= threshold && Math.abs(Xdist) <= 100);
-        var swipeupBol = (elapsedTime <= allowedTime && Ydist <= -threshold && Math.abs(Xdist) <= 100);
+        var swiperightBol = (elapsedTime <= allowedTime && Xdist >= threshold && Math.abs(Ydist) <= 50);
+        var swipeleftBol = (elapsedTime <= allowedTime && Xdist <= -threshold && Math.abs(Ydist) <= 50);
+        var swipedownBol = (elapsedTime <= allowedTime && Ydist >= threshold && Math.abs(Xdist) <= 50);
+        var swipeupBol = (elapsedTime <= allowedTime && Ydist <= -threshold && Math.abs(Xdist) <= 50);
         handleswipe(swipeleftBol, swiperightBol, swipeupBol, swipedownBol)
         e.preventDefault()
     }, false)
