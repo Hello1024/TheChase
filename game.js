@@ -36,7 +36,7 @@ var start_game = function() {
     board = document.getElementById('game');
     context = board.getContext('2d');
     
-    new Audio('assets/frogger.mp3').play();
+    new Audio('07048106.wav').play();
     
     sprites = new Image();
     deadsprite = new Image();
@@ -53,12 +53,12 @@ var start_game = function() {
 
 var game_loop = function() {
     if (!game.paused) {
-        game.score += 1;
         draw_bg();
         draw_info();
         draw_cars();
         draw_police();
         if (game.lives > 0) { 
+            game.score += 1;
             draw_frog();
         } else {
             game_over();
@@ -271,6 +271,8 @@ var car_collision = function() {
 var sploosh = function() {
     game.lives--;
     game.dead = 20;
+    new Audio('Prison Cell Door sound effect.mp3').play();
+    
 };
 
 var hit_car = function() {
@@ -369,3 +371,62 @@ var Game = function() {
     this.reset();
 }
 
+
+
+window.addEventListener('load', function(){
+ 
+    var touchsurface = document.getElementById('game'),
+        startX,
+        startY,
+        Xdist,
+        Ydist,
+        threshold = 150, //required min distance traveled to be considered swipe
+        allowedTime = 400, // maximum time allowed to travel that distance
+        elapsedTime,
+        startTime
+ 
+    function handleswipe(swipeleftBol, swiperightBol, swipeupBol, swipedownBol){
+
+        game.paused = false;
+        if (game.dead === -1 && game.lives > 0) {
+            if (swipeupBol){ 
+                up();
+            } else if (swipedownBol){
+                down();
+            } else if (swipeleftBol){
+                left();
+            } else if (swiperightBol){
+                right();
+            }
+        }
+    }
+ 
+    touchsurface.addEventListener('touchstart', function(e){
+        touchsurface.innerHTML = ''
+        var touchobj = e.changedTouches[0]
+        dist = 0
+        startX = touchobj.pageX
+        startY = touchobj.pageY
+        startTime = new Date().getTime() // record time when finger first makes contact with surface
+        e.preventDefault();
+    }, false)
+ 
+    touchsurface.addEventListener('touchmove', function(e){
+        e.preventDefault() // prevent scrolling when inside DIV
+    }, false)
+ 
+    touchsurface.addEventListener('touchend', function(e){
+        var touchobj = e.changedTouches[0]
+        Xdist = touchobj.pageX - startX // get total dist traveled by finger while in contact with surface
+        Ydist = touchobj.pageY - startY // get total dist traveled by finger while in contact with surface
+        elapsedTime = new Date().getTime() - startTime // get time elapsed
+        // check that elapsed time is within specified, horizontal dist traveled >= threshold, and vertical dist traveled <= 100
+        var swiperightBol = (elapsedTime <= allowedTime && Xdist >= threshold && Math.abs(Ydist) <= 100);
+        var swipeleftBol = (elapsedTime <= allowedTime && Xdist <= -threshold && Math.abs(Ydist) <= 100);
+        var swipedownBol = (elapsedTime <= allowedTime && Ydist >= threshold && Math.abs(Xdist) <= 100);
+        var swipeupBol = (elapsedTime <= allowedTime && Ydist <= -threshold && Math.abs(Xdist) <= 100);
+        handleswipe(swipeleftBol, swiperightBol, swipeupBol, swipedownBol)
+        e.preventDefault()
+    }, false)
+ 
+}, false) // end window.onload
