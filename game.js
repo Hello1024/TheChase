@@ -12,6 +12,7 @@ var context = null;
 
 var show_rules = function() {
     document.getElementById('start_image').style.visibility="hidden";
+    document.getElementById('rules_image').style.visibility="visible";
 }
 var start_game = function() {
     document.getElementById('rules_image').style.visibility="hidden";
@@ -190,17 +191,13 @@ var draw_cars = function() {
 
 
 var game_over = function() {
-    context.font = 'bold 48pt arial';
-    context.fillStyle = '#222';
-    context.fillText('GAME', 60, 80);
-    context.fillText('OVER', 60, 160);
     if (game.score >= highscore) {
         localStorage['highscore'] = game.score;
         context.font = 'bold 32pt arial';
         context.fillStyle = '#922';
-        context.fillText('YOU GOT A', 20, 210);
-        context.fillText('HIGHSCORE', 6, 280);
+        context.fillText('HIGHSCORE!', 6, 280);
     }
+    document.getElementById('game_over_image').style.display = 'block';
 };
 
 //move
@@ -378,7 +375,7 @@ var Game = function() {
 
 window.addEventListener('load', function(){
  
-    var touchsurface = document.getElementById('game'),
+    var touchsurface = document.getElementById('game_div'),
         startX,
         startY,
         Xdist,
@@ -405,7 +402,6 @@ window.addEventListener('load', function(){
     }
  
     touchsurface.addEventListener('touchstart', function(e){
-        touchsurface.innerHTML = ''
         var touchobj = e.changedTouches[0]
         dist = 0
         startX = touchobj.pageX
