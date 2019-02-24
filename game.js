@@ -20,10 +20,10 @@ var start_game = function() {
     game = new Game();
     
     $(document).keydown(function(e) {
+        if (game.paused) return;
         var arrow_key = get_arrow_key(e);
         if (arrow_key) {
             e.preventDefault(); 
-            game.paused = false;
         }
         if (game.dead === -1 && game.lives > 0) {
             if (arrow_key === 'u'){ 
@@ -198,6 +198,8 @@ var game_over = function() {
         context.fillText('HIGHSCORE!', 6, 280);
     }
     document.getElementById('game_over_image').style.display = 'block';
+    document.getElementById('game').style.opacity = '0.3';
+      
 };
 
 //move
@@ -228,7 +230,7 @@ var right = function() {
 };
 
 var bounds_check = function(x, y) {
-    if (y > 300-271 && y < 480-271 && x > 0 && x < 369) {
+    if (y > 300-271 && y < 480-271 && x > 0 && x < 339) {
         return true;
     }
     return false;
@@ -343,7 +345,7 @@ var Car = function(x, y, lane, model) {
     };
     this.draw = function() {
         if (models[this.model].image) {
-            context.drawImage(models[this.model].image, this.posX, this.posY, 30, 22);
+            context.drawImage(models[this.model].image, this.posX, this.posY-8, 40, 30);
         } else {
             models[this.model].image = new Image();
             models[this.model].image.src = models[this.model].file;
@@ -367,7 +369,7 @@ var Game = function() {
         this.highest = -1;
         this.dead = -1;
     }
-    this.paused = true;
+    this.paused = false;
     this.reset();
 }
 
@@ -386,8 +388,6 @@ window.addEventListener('load', function(){
         startTime
  
     function handleswipe(swipeleftBol, swiperightBol, swipeupBol, swipedownBol){
-
-        game.paused = false;
         if (game.dead === -1 && game.lives > 0) {
             if (swipeupBol){ 
                 up();
